@@ -55,7 +55,11 @@ Cada servicio es responsable de su lógica y de sus datos. Los servicios no cons
 
 ## Documentación
 
-La documentación técnica y los acuerdos del equipo se mantendrán en `docs/`. Se incluirán, entre otros, el diagrama de arquitectura, responsabilidades de cada servicio, modelo de datos, endpoints y procedimiento de colaboración.
+La documentación técnica y los acuerdos del equipo se mantendrán en [`docs/`](docs/). Documentos disponibles:
+
+- [Flujo de trabajo y reglas de colaboración](docs/flujo-de-trabajo.md): ramas, commits, Pull/Merge Requests, revisión e integración.
+
+Se agregarán aquí enlaces al diagrama de arquitectura, responsabilidades de cada servicio, modelo de datos y documentación de endpoints conforme se elaboren.
 
 ## Estado del proyecto
 
