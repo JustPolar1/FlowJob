@@ -1,0 +1,1 @@
+"""Member service database configuration."""

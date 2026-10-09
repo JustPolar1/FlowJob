@@ -1,0 +1,1 @@
+"""Task service database configuration."""
