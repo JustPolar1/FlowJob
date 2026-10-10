@@ -1,1 +1,1 @@
-"""Request and response schemas for the task service."""
+"""Request and response schemas for tasks."""

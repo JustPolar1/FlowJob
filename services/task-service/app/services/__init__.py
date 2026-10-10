@@ -1,1 +1,1 @@
-"""Task service business logic."""
+"""Task service application logic."""
