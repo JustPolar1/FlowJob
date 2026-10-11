@@ -1,6 +1,7 @@
 from fastapi import FastAPI
 
 from app.api.routes.health import router as health_router
+from app.api.routes.members import router as members_router
 from app.db.database import Base, engine
 from app import models  # noqa: F401 — importing registers the service's models with Base.
 
@@ -11,6 +12,7 @@ app = FastAPI(
 )
 
 app.include_router(health_router, tags=["health"])
+app.include_router(members_router)
 
 
 @app.on_event("startup")
