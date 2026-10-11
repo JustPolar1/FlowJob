@@ -1,7 +1,9 @@
 from fastapi import APIRouter, HTTPException, Response, status
 
+from app.clients.member_client import MemberServiceUnavailableError
 from app.schemas.task import TaskCreate, TaskResponse, TaskUpdate
 from app.services.task_service import (
+    AssigneeNotFoundError,
     TaskNotFoundError,
     create_task,
     delete_task,
@@ -15,7 +17,18 @@ router = APIRouter(prefix="/tasks")
 
 @router.post("", response_model=TaskResponse, status_code=status.HTTP_201_CREATED)
 def create_task_endpoint(payload: TaskCreate) -> TaskResponse:
-    return create_task(payload)
+    try:
+        return create_task(payload)
+    except AssigneeNotFoundError as error:
+        raise HTTPException(
+            status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
+            detail=str(error),
+        ) from error
+    except MemberServiceUnavailableError as error:
+        raise HTTPException(
+            status_code=status.HTTP_503_SERVICE_UNAVAILABLE,
+            detail=str(error),
+        ) from error
 
 
 @router.get("", response_model=list[TaskResponse])
@@ -37,6 +50,16 @@ def update_task_endpoint(task_id: int, payload: TaskUpdate) -> TaskResponse:
         return update_task(task_id, payload)
     except TaskNotFoundError as error:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=str(error)) from error
+    except AssigneeNotFoundError as error:
+        raise HTTPException(
+            status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
+            detail=str(error),
+        ) from error
+    except MemberServiceUnavailableError as error:
+        raise HTTPException(
+            status_code=status.HTTP_503_SERVICE_UNAVAILABLE,
+            detail=str(error),
+        ) from error
 
 
 @router.delete("/{task_id}", status_code=status.HTTP_204_NO_CONTENT)
