@@ -1,3 +1,4 @@
 fastapi
 httpx
+sqlalchemy>=2.0,<3.0
 uvicorn[standard]
