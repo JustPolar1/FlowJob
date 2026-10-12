@@ -24,5 +24,13 @@ El Gateway admite estas variables de entorno:
 | `FRONTEND_ORIGINS` | `http://localhost:5173,http://127.0.0.1:5173` | Orígenes permitidos por CORS, separados por comas |
 | `TASK_SERVICE_URL` | `http://127.0.0.1:8001` | Dirección interna del servicio de tareas |
 | `MEMBER_SERVICE_URL` | `http://127.0.0.1:8002` | Dirección interna del servicio de integrantes |
+| `SERVICE_TIMEOUT_SECONDS` | `5` | Tiempo máximo de espera de cada servicio interno |
 
-Las rutas que reenvían solicitudes a cada servicio se añadirán en sus issues correspondientes (B15 y B16).
+## Rutas del Gateway
+
+| Ruta | Operaciones reenviadas | Servicio |
+| --- | --- | --- |
+| `/api/tasks` y `/api/tasks/{path}` | `GET`, `POST`, `PATCH`, `DELETE` | Task Service |
+| `/api/members` y `/api/members/{path}` | `GET`, `POST` | Member Service |
+
+El Gateway conserva el estado y el cuerpo de las respuestas de los servicios. Si un servicio no está disponible devuelve `503`; si excede el tiempo configurado, devuelve `504`.

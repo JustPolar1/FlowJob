@@ -13,6 +13,7 @@ class Settings:
     frontend_origins = _frontend_origins()
     task_service_url = os.getenv("TASK_SERVICE_URL", "http://127.0.0.1:8001").rstrip("/")
     member_service_url = os.getenv("MEMBER_SERVICE_URL", "http://127.0.0.1:8002").rstrip("/")
+    service_timeout_seconds = float(os.getenv("SERVICE_TIMEOUT_SECONDS", "5"))
 
 
 settings = Settings()
