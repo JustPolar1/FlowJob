@@ -23,10 +23,6 @@ export function getTasks({ signal, status, assigneeId } = {}) {
   return requestJson(`/api/tasks${query}`, { signal });
 }
 
-export function getMembers({ signal } = {}) {
-  return requestJson('/api/members', { signal });
-}
-
 export function createTask(task) {
   return requestJson('/api/tasks', {
     method: 'POST',

@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useState } from 'react';
 import PageHeader from '../../../components/PageHeader.jsx';
-import { createTask, deleteTask as removeTask, getMembers, getTasks, updateTask } from '../services/taskApi.js';
+import { getMembers } from '../../team/services/memberApi.js';
+import { createTask, deleteTask as removeTask, getTasks, updateTask } from '../services/taskApi.js';
 
 const EMPTY_FORM = {
   title: '',
