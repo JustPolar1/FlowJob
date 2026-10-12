@@ -1,4 +1,5 @@
 from app.clients import member_client
+from app.core.enums import TaskStatus
 from app.repositories.task_repository import TaskNotFoundError, TaskRepository
 from app.schemas.task import TaskCreate, TaskResponse, TaskUpdate
 
@@ -24,8 +25,15 @@ def create_task(payload: TaskCreate) -> TaskResponse:
     return TaskResponse.model_validate(record)
 
 
-def list_tasks() -> list[TaskResponse]:
-    return [TaskResponse.model_validate(record) for record in repository.list()]
+def list_tasks(
+    task_status: TaskStatus | None = None,
+    assignee_id: int | None = None,
+) -> list[TaskResponse]:
+    records = repository.list(
+        status=task_status.value if task_status is not None else None,
+        assignee_id=assignee_id,
+    )
+    return [TaskResponse.model_validate(record) for record in records]
 
 
 def get_task(task_id: int) -> TaskResponse:

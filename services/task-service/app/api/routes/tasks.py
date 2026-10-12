@@ -1,6 +1,7 @@
-from fastapi import APIRouter, HTTPException, Response, status
+from fastapi import APIRouter, HTTPException, Query, Response, status
 
 from app.clients.member_client import MemberServiceUnavailableError
+from app.core.enums import TaskStatus
 from app.schemas.task import TaskCreate, TaskResponse, TaskUpdate
 from app.services.task_service import (
     AssigneeNotFoundError,
@@ -32,8 +33,19 @@ def create_task_endpoint(payload: TaskCreate) -> TaskResponse:
 
 
 @router.get("", response_model=list[TaskResponse])
-def list_tasks_endpoint() -> list[TaskResponse]:
-    return list_tasks()
+def list_tasks_endpoint(
+    task_status: TaskStatus | None = Query(
+        default=None,
+        alias="status",
+        description="Filtra por estado de la tarea.",
+    ),
+    assignee_id: int | None = Query(
+        default=None,
+        ge=1,
+        description="Filtra por identificador del integrante asignado.",
+    ),
+) -> list[TaskResponse]:
+    return list_tasks(task_status=task_status, assignee_id=assignee_id)
 
 
 @router.get("/{task_id}", response_model=TaskResponse)

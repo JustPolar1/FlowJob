@@ -32,9 +32,18 @@ class TaskRepository:
             self._next_id += 1
             return task
 
-    def list(self) -> list[TaskRecord]:
+    def list(
+        self,
+        status: str | None = None,
+        assignee_id: int | None = None,
+    ) -> list[TaskRecord]:
         with self._lock:
-            return list(self._tasks.values())
+            return [
+                task
+                for task in self._tasks.values()
+                if (status is None or task.status == status)
+                and (assignee_id is None or task.assignee_id == assignee_id)
+            ]
 
     def get(self, task_id: int) -> TaskRecord:
         with self._lock:
