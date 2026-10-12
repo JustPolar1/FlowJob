@@ -1,1 +1,1 @@
-"""Task service for FlowJob."""
+"""Task management microservice for FlowJob."""
