@@ -30,4 +30,4 @@ Cada servicio es dueño de su base SQLite y accede solo a sus propios datos. El 
 
 Esta primera estructura incluye aplicaciones mínimas y endpoints `/health`. Los endpoints del dominio, los modelos de datos, la política de validación de responsables y las rutas del Gateway se definirán e implementarán en las siguientes actividades.
 
-El Task Service permite asignar un integrante mediante `assignee_id` al crear una tarea (`POST /tasks`) o actualizarla (`PATCH /tasks/{task_id}`). El identificador se guarda y se devuelve en la respuesta; la comprobación de que exista en el Member Service queda fuera de esta issue y se atenderá en la issue #12.
+El Task Service permite asignar un integrante mediante `assignee_id` al crear una tarea (`POST /tasks`) o actualizarla (`PATCH /tasks/{task_id}`). El identificador se guarda y se devuelve en la respuesta; además, el servicio comprueba que el integrante exista en el Member Service antes de guardar la asignación.

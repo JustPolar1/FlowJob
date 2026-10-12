@@ -38,6 +38,38 @@ def test_update_task_assigns_assignee_id(client: TestClient) -> None:
     assert response.json()["assignee_id"] == 17
 
 
+def test_get_task_returns_created_task(client: TestClient) -> None:
+    created = client.post("/tasks", json={"title": "Preparar informe"}).json()
+
+    response = client.get(f"/tasks/{created['id']}")
+
+    assert response.status_code == 200
+    assert response.json()["id"] == created["id"]
+    assert response.json()["title"] == "Preparar informe"
+
+
+def test_get_task_returns_404_for_unknown_id(client: TestClient) -> None:
+    response = client.get("/tasks/999")
+
+    assert response.status_code == 404
+
+
+def test_delete_task_removes_task(client: TestClient) -> None:
+    created = client.post("/tasks", json={"title": "Preparar informe"}).json()
+
+    response = client.delete(f"/tasks/{created['id']}")
+
+    assert response.status_code == 204
+    assert response.content == b""
+    assert client.get(f"/tasks/{created['id']}").status_code == 404
+
+
+def test_delete_task_returns_404_for_unknown_id(client: TestClient) -> None:
+    response = client.delete("/tasks/999")
+
+    assert response.status_code == 404
+
+
 def test_create_task_rejects_unknown_assignee(
     client: TestClient,
     monkeypatch: pytest.MonkeyPatch,
