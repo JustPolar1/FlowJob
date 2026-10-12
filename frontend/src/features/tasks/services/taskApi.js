@@ -1,8 +1,7 @@
-export async function getTasks({ signal } = {}) {
-  const response = await fetch('/api/tasks', { signal });
-
+async function requestJson(url, options = {}) {
+  const response = await fetch(url, options);
   if (!response.ok) {
-    let message = 'No se pudieron cargar las tareas.';
+    let message = 'No se pudo completar la solicitud.';
     try {
       const body = await response.json();
       if (typeof body.detail === 'string') message = body.detail;
@@ -12,5 +11,29 @@ export async function getTasks({ signal } = {}) {
     throw new Error(message);
   }
 
-  return response.json();
+  return response.status === 204 ? null : response.json();
+}
+
+export function getTasks({ signal } = {}) {
+  return requestJson('/api/tasks', { signal });
+}
+
+export function getMembers({ signal } = {}) {
+  return requestJson('/api/members', { signal });
+}
+
+export function createTask(task) {
+  return requestJson('/api/tasks', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(task),
+  });
+}
+
+export function updateTask(taskId, task) {
+  return requestJson(`/api/tasks/${taskId}`, {
+    method: 'PATCH',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(task),
+  });
 }

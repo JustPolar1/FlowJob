@@ -65,7 +65,7 @@ Cada servicio es responsable de su lógica y de sus datos. Los servicios no cons
 
 ## Ejecución local
 
-El Member Service crea su base SQLite y la tabla `members` al iniciar. La base se guarda por defecto en `services/member-service/data/members.db` y puede cambiarse con la variable `MEMBER_DATABASE_URL`. El Task Service crea su propia base y la tabla `tasks` en `services/task-service/data/tasks.db`, configurable con `TASK_DATABASE_URL`. La página de tareas consulta `GET /api/tasks` en el Gateway, que reenvía la solicitud al Task Service.
+El Member Service crea su base SQLite y la tabla `members` al iniciar. La base se guarda por defecto en `services/member-service/data/members.db` y puede cambiarse con la variable `MEMBER_DATABASE_URL`. El Task Service crea su propia base y la tabla `tasks` en `services/task-service/data/tasks.db`, configurable con `TASK_DATABASE_URL`. La página de tareas consulta, crea y edita tareas a través del Gateway; también consulta allí el listado de integrantes para asignar responsables.
 
 1. Clonar el repositorio y entrar al proyecto:
 
@@ -102,7 +102,7 @@ El Member Service crea su base SQLite y la tabla `members` al iniciar. La base s
    npm run dev
    ```
 
-   Abrir la dirección local que muestre Vite (configurada por defecto en `http://localhost:5173`). La página de tareas consulta `GET /api/tasks` a través del Gateway.
+   Abrir la dirección local que muestre Vite (configurada por defecto en `http://localhost:5173`). La página de tareas consulta y administra tareas mediante el Gateway.
 
 ## Documentación
 
