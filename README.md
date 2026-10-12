@@ -65,7 +65,7 @@ Cada servicio es responsable de su lógica y de sus datos. Los servicios no cons
 
 ## Ejecución local
 
-El Member Service crea su base SQLite y la tabla `members` al iniciar. La base se guarda por defecto en `services/member-service/data/members.db` y puede cambiarse con la variable `MEMBER_DATABASE_URL`. Las operaciones HTTP para gestionar integrantes y tareas se agregarán en los siguientes cambios.
+El Member Service crea su base SQLite y la tabla `members` al iniciar. La base se guarda por defecto en `services/member-service/data/members.db` y puede cambiarse con la variable `MEMBER_DATABASE_URL`. El Task Service crea su propia base y la tabla `tasks` en `services/task-service/data/tasks.db`, configurable con `TASK_DATABASE_URL`. Las operaciones HTTP para gestionar integrantes y tareas se agregarán en los siguientes cambios.
 
 1. Clonar el repositorio y entrar al proyecto:
 
