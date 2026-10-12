@@ -1,1 +1,1 @@
-"""Gateway configuration."""
+"""Gateway configuration and shared HTTP helpers."""
