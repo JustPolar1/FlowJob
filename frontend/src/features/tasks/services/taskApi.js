@@ -14,8 +14,13 @@ async function requestJson(url, options = {}) {
   return response.status === 204 ? null : response.json();
 }
 
-export function getTasks({ signal } = {}) {
-  return requestJson('/api/tasks', { signal });
+export function getTasks({ signal, status, assigneeId } = {}) {
+  const params = new URLSearchParams();
+  if (status) params.set('status', status);
+  if (assigneeId) params.set('assignee_id', assigneeId);
+  const queryString = params.toString();
+  const query = queryString ? `?${queryString}` : '';
+  return requestJson(`/api/tasks${query}`, { signal });
 }
 
 export function getMembers({ signal } = {}) {

@@ -29,18 +29,24 @@ export default function TasksPage() {
   const [form, setForm] = useState(EMPTY_FORM);
   const [formError, setFormError] = useState('');
   const [saving, setSaving] = useState(false);
+  const [statusFilter, setStatusFilter] = useState('');
+  const [assigneeFilter, setAssigneeFilter] = useState('');
 
   const loadTasks = useCallback(async (signal) => {
     setLoading(true);
     setError('');
     try {
-      setTasks(await getTasks({ signal }));
+      setTasks(await getTasks({
+        signal,
+        status: statusFilter,
+        assigneeId: assigneeFilter,
+      }));
     } catch (loadError) {
       if (loadError.name !== 'AbortError') setError(loadError.message);
     } finally {
       if (!signal.aborted) setLoading(false);
     }
-  }, []);
+  }, [statusFilter, assigneeFilter]);
 
   useEffect(() => {
     const controller = new AbortController();
@@ -49,7 +55,6 @@ export default function TasksPage() {
   }, [loadTasks, reloadKey]);
 
   useEffect(() => {
-    if (!formOpen) return undefined;
     const controller = new AbortController();
     setMembersLoading(true);
     setMembersError('');
@@ -62,7 +67,7 @@ export default function TasksPage() {
         if (!controller.signal.aborted) setMembersLoading(false);
       });
     return () => controller.abort();
-  }, [formOpen]);
+  }, []);
 
   function openCreateForm() {
     setEditingTask(null);
@@ -207,6 +212,43 @@ export default function TasksPage() {
         </form>
       )}
 
+      <div className="task-filters" aria-label="Filtros de tareas">
+        <label className="task-filter-field">
+          <span>Estado</span>
+          <select value={statusFilter} onChange={(event) => setStatusFilter(event.target.value)}>
+            <option value="">Todos los estados</option>
+            <option>Pendiente</option>
+            <option>En proceso</option>
+            <option>Terminada</option>
+          </select>
+        </label>
+        <label className="task-filter-field">
+          <span>Responsable</span>
+          <select
+            value={assigneeFilter}
+            onChange={(event) => setAssigneeFilter(event.target.value)}
+            disabled={membersLoading || Boolean(membersError)}
+          >
+            <option value="">Todos los responsables</option>
+            {members.map((member) => (
+              <option key={member.id} value={String(member.id)}>{member.name}</option>
+            ))}
+          </select>
+        </label>
+        {(statusFilter || assigneeFilter) && (
+          <button
+            className="clear-filters-button"
+            onClick={() => {
+              setStatusFilter('');
+              setAssigneeFilter('');
+            }}
+          >
+            Limpiar filtros
+          </button>
+        )}
+        {membersError && <span className="filter-note-error">No se pudieron cargar los responsables.</span>}
+      </div>
+
       {loading && <p className="tasks-feedback" role="status">Cargando tareas…</p>}
 
       {!loading && error && (
@@ -221,8 +263,8 @@ export default function TasksPage() {
       {!loading && !error && tasks.length === 0 && (
         <div className="empty-state">
           <span className="empty-icon" aria-hidden="true">☷</span>
-          <h2>Aún no hay tareas</h2>
-          <p>Crea una tarea para que el equipo pueda empezar a trabajar.</p>
+          <h2>{statusFilter || assigneeFilter ? 'No hay tareas con estos filtros' : 'Aún no hay tareas'}</h2>
+          <p>{statusFilter || assigneeFilter ? 'Prueba cambiando o limpiando los filtros.' : 'Crea una tarea para que el equipo pueda empezar a trabajar.'}</p>
         </div>
       )}
 
