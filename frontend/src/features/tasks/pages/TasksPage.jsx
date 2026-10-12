@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useState } from 'react';
 import PageHeader from '../../../components/PageHeader.jsx';
-import { createTask, getMembers, getTasks, updateTask } from '../services/taskApi.js';
+import { createTask, deleteTask as removeTask, getMembers, getTasks, updateTask } from '../services/taskApi.js';
 
 const EMPTY_FORM = {
   title: '',
@@ -31,6 +31,9 @@ export default function TasksPage() {
   const [saving, setSaving] = useState(false);
   const [statusFilter, setStatusFilter] = useState('');
   const [assigneeFilter, setAssigneeFilter] = useState('');
+  const [deletingTask, setDeletingTask] = useState(null);
+  const [deleteError, setDeleteError] = useState('');
+  const [deleting, setDeleting] = useState(false);
 
   const loadTasks = useCallback(async (signal) => {
     setLoading(true);
@@ -121,6 +124,21 @@ export default function TasksPage() {
       setFormError(saveError.message);
     } finally {
       setSaving(false);
+    }
+  }
+
+  async function handleDelete() {
+    if (!deletingTask) return;
+    setDeleting(true);
+    setDeleteError('');
+    try {
+      await removeTask(deletingTask.id);
+      setDeletingTask(null);
+      setReloadKey((key) => key + 1);
+    } catch (deleteRequestError) {
+      setDeleteError(deleteRequestError.message);
+    } finally {
+      setDeleting(false);
     }
   }
 
@@ -280,6 +298,15 @@ export default function TasksPage() {
                 <div className="task-card-actions">
                   <span className={`task-badge ${statusClass(task.status)}`}>{task.status}</span>
                   <button className="secondary-button task-edit-button" onClick={() => openEditForm(task)}>Editar</button>
+                  <button
+                    className="danger-button task-edit-button"
+                    onClick={() => {
+                      setDeletingTask(task);
+                      setDeleteError('');
+                    }}
+                  >
+                    Eliminar
+                  </button>
                 </div>
               </div>
               {task.description && <p className="task-description">{task.description}</p>}
@@ -291,6 +318,39 @@ export default function TasksPage() {
               </div>
             </article>
           ))}
+        </div>
+      )}
+
+      {deletingTask && (
+        <div className="confirm-backdrop">
+          <section
+            className="confirm-dialog"
+            role="alertdialog"
+            aria-modal="true"
+            aria-labelledby="delete-task-title"
+            aria-describedby="delete-task-description"
+          >
+            <span className="confirm-icon" aria-hidden="true">!</span>
+            <h2 id="delete-task-title">¿Eliminar esta tarea?</h2>
+            <p id="delete-task-description">
+              Se eliminará <strong>“{deletingTask.title}”</strong> de forma permanente. Esta acción no se puede deshacer.
+            </p>
+            {deleteError && <p className="form-error" role="alert">{deleteError}</p>}
+            <div className="confirm-actions">
+              <button
+                className="secondary-button"
+                type="button"
+                autoFocus
+                onClick={() => setDeletingTask(null)}
+                disabled={deleting}
+              >
+                Cancelar
+              </button>
+              <button className="danger-button" type="button" onClick={handleDelete} disabled={deleting}>
+                {deleting ? 'Eliminando…' : 'Sí, eliminar tarea'}
+              </button>
+            </div>
+          </section>
         </div>
       )}
     </section>

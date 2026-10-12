@@ -61,6 +61,17 @@ h1, h2, p { margin-top: 0; }
 .primary-button:disabled, .secondary-button:disabled { cursor: wait; opacity: 0.65; }
 .secondary-button { min-height: 38px; padding: 0 14px; border: 1px solid #dedff0; border-radius: 9px; background: #fff; color: #514bd8; cursor: pointer; font-weight: 650; }
 .secondary-button:hover { background: #f6f5ff; }
+.danger-button { display: inline-flex; min-height: 38px; align-items: center; justify-content: center; padding: 0 13px; border: 1px solid #d84d58; border-radius: 9px; background: #d84d58; color: #fff; cursor: pointer; font-size: 0.79rem; font-weight: 700; }
+.danger-button:hover { border-color: #bc3541; background: #bc3541; }
+.danger-button:disabled { cursor: wait; opacity: 0.65; }
+.confirm-backdrop { position: fixed; z-index: 20; inset: 0; display: grid; place-items: center; padding: 20px; background: rgb(27 29 43 / 46%); }
+.confirm-dialog { width: min(440px, 100%); padding: 26px; border: 1px solid #eeeef4; border-radius: 18px; background: #fff; box-shadow: 0 24px 70px rgb(18 20 40 / 24%); }
+.confirm-icon { display: grid; width: 42px; height: 42px; margin-bottom: 17px; place-items: center; border-radius: 13px; background: #fff0f0; color: #c8404c; font-size: 1.25rem; font-weight: 800; }
+.confirm-dialog h2 { margin-bottom: 9px; font-size: 1.15rem; letter-spacing: -0.03em; }
+.confirm-dialog > p { margin-bottom: 0; color: #777b8d; font-size: 0.88rem; line-height: 1.55; overflow-wrap: anywhere; }
+.confirm-dialog > .form-error { margin-top: 13px; }
+.confirm-actions { display: flex; justify-content: flex-end; gap: 9px; margin-top: 23px; }
+.confirm-actions .danger-button { min-height: 38px; }
 .task-form-card { margin: 0 0 24px; padding: 22px; border: 1px solid #e5e4f5; border-radius: 16px; background: #fff; box-shadow: 0 12px 30px rgb(40 45 78 / 5%); }
 .task-form-heading { display: flex; align-items: flex-start; justify-content: space-between; margin-bottom: 18px; }
 .task-form-heading h2 { margin: 0; font-size: 1.05rem; letter-spacing: -0.025em; }
@@ -136,5 +147,7 @@ h1, h2, p { margin-top: 0; }
   .task-form-grid { grid-template-columns: 1fr; }
   .task-field-wide { grid-column: auto; }
   .task-card-heading { flex-direction: column; }
-  .task-card-actions { width: 100%; justify-content: space-between; }
+  .task-card-actions { width: 100%; flex-wrap: wrap; justify-content: space-between; }
+  .confirm-dialog { padding: 22px 18px; }
+  .confirm-actions { flex-wrap: wrap; }
 }
